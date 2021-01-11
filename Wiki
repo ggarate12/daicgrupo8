@@ -1,0 +1,25 @@
+Introducción
+  Este proyecto consiste en la creación de una máquina de vending aplicando diferentes tecnologías como: Amazon Web Services, Edge Computing, Raspberry Pi y Visión Artificial. Estos cuatro conceptos han sido utilizados para hacer que la máquina de vending sea manipulable mediante la red por el usuario.
+
+Nuevos conceptos
+  Amazon Cognito
+    Amazon Cognito proporciona autenticación, autorización y administración de usuarios para sus aplicaciones móviles y web. Los usuarios pueden iniciar sesión directamente con un nombre de usuario y una contraseña o a través de un tercero como Facebook, Amazon, Google o Apple.
+	AWS API Gateway
+    Amazon API Gateway es un servicio completamente administrado que facilita a los desarrolladores la creación, la publicación, el mantenimiento, el monitoreo y la protección de API a cualquier escala. Las API actúan como la "puerta de entrada" para que las aplicaciones accedan a los datos, la lógica empresarial o la funcionalidad de sus servicios de backend. Con API Gateway, puede crear API RESTful y API WebSocket que permiten aplicaciones de comunicación bidireccional en tiempo real. API Gateway admite cargas de trabajo en contenedores y sin servidor, así como aplicaciones web.
+	AWS Dynamo DB
+    Amazon DynamoDB es un servicio de base de datos noSQL ofrecido por Amazon como parte de Amazon Web Services. DynamoDB expone un modelo de datos similar y deriva su nombre de Dynamo (un sistema de almacenamiento interno utilizado inicialmente para su propio sitio web), pero tiene una implementación subyacente diferente. Dynamo tenía un diseño multimaestro que requería que el cliente resolviera conflictos de versiones y DynamoDB usa replicación síncrona en múltiples centros de datos para una alta durabilidad y disponibilidad. DynamoDB fue anunciado por Amazon CTO Werner Vogels el 18 de enero de 2012.
+	AWS Lambda
+    AWS Lambda le permite ejecutar código sin aprovisionar ni administrar servidores. Paga solo por el tiempo de cómputo que consume. Con Lambda, puede ejecutar código para casi cualquier tipo de aplicación o servicio backend sin tener que realizar tareas de administración. Solo tiene que cargar el código y Lambda se encargará de todo lo necesario para ejecutar y escalar el código con alta disponibilidad. Puede configurar su código para que se active automáticamente desde otros servicios de AWS o puede llamarlo directamente desde cualquier aplicación web o móvil.
+	AWS IoT
+    AWS IoT proporciona los servicios en la nube que conectan sus dispositivos IoT con otros dispositivos y servicios en la nube de AWS. AWS IoT proporciona software que puede ayudarle a integrar sus dispositivos IoT en soluciones basadas en AWS IoT. Si sus dispositivos pueden conectarse a AWS IoT, AWS IoT puede conectarlos a los servicios en la nube que proporciona AWS.
+ 
+
+	
+
+
+Implementación
+  El usuario primeramente se tiene que dar de alta en nuestra página web, donde deberá rellenar ciertos datos como nombre completo, nombre de usuario, email y contraseña. Una vez completados esos datos, y después de que se valide que los datos introducidos no generan ningún tipo de excepción, se enviará al email introducido un correo para confirmar el email gracias a la implementación de Amazon Cognito. Solo se podrá iniciar sesión si el usuario ha confirmado su email.
+  Una vez iniciada la sesión, aparecerá una pantalla en la que la página accederá a la cámara del dispositivo para leer el código QR de nuestra máquina de vending. Cabe mencionar que la identificación de las máquinas con códigos QR es porque este proyecto está pensado para tener muchas máquinas disponibles y pensamos que este método de identificación es el más óptimo ya que hoy en día las personas siempre llevamos con nosotros nuestros teléfonos móviles, los cuales son capaces de leer este tipo de códigos. Una vez que la app web lee el código QR, aparece el número de identificación de la máquina. Rápidamente el sistema accede a la AWS Dynamo DB donde se identifica de qué máquina se trata.
+  Se hace un HTTP Post a una API Gateway, que va a hacer de intermediario entre la web y la función lambda de AWS, cuya finalidad es por un lado insertar datos en AWS Dynamo DB y por el otro, en el topic compras, manda un JSON con toda la información. La raspberry dispone de un script que se conecta al topic compras y a partir de ahí recurre a la inteligencia artificial para reconocer los productos.
+  Después de todos estos procesos internos, el usuario puede abrir la puerta de la máquina vending y coger el producto deseado. Una vez que el usuario coge el producto que quiera, cierra la puerta, y es en ese momento cuando mediante la IA, el sistema detecta que un producto ha sido retirado.
+
